@@ -1,168 +1,346 @@
-// Data for Waste Items and Ideas
-const wasteData = [
-    {
-        id: 'plastic-bottles',
-        title: 'Plastic Bottles',
-        icon: '🍾',
-        desc: 'Bottles, caps, and containers',
-        ideas: [
-            { name: 'Self-watering Planter', desc: 'Cut the bottle in half, invert the top part into the bottom part with water, and use a string as a wick for soil.' },
-            { name: 'Bird Feeder', desc: 'Poke holes, insert wooden spoons as perches, and fill with birdseed. Hang it outside.' },
-            { name: 'Pencil Organizer', desc: 'Cut the bottom half of several bottles, paint them, and glue them together for a desk organizer.' }
-        ]
-    },
-    {
-        id: 'cardboard',
-        title: 'Cardboard Boxes',
-        icon: '📦',
-        desc: 'Shipping boxes, shoe boxes',
-        ideas: [
-            { name: 'Drawer Dividers', desc: 'Cut strips of cardboard to the length and width of your drawers, slot them together to organize clothes or utensils.' },
-            { name: 'Cat Scratching Pad', desc: 'Cut cardboard into identical strips and glue them tightly together side-by-side to make a durable scratcher.' },
-            { name: 'Decorative Storage Bins', desc: 'Wrap an old shoe box in fabric, twine, or wrapping paper to create stylish storage.' }
-        ]
-    },
-    {
-        id: 'glass-jars',
-        title: 'Glass Jars',
-        icon: '🫙',
-        desc: 'Jam, pasta sauce, or pickle jars',
-        ideas: [
-            { name: 'Terrarium', desc: 'Layer pebbles, charcoal, soil, and small plants inside a clean jar for a mini indoor garden.' },
-            { name: 'Pantry Storage', desc: 'Clean thoroughly, remove labels, and use for storing grains, spices, or pasta.' },
-            { name: 'Lanterns', desc: 'Place a tealight or fairy lights inside. Decorate the outside with frosted glass spray or twine.' }
-        ]
-    },
-    {
-        id: 'old-clothes',
-        title: 'Old Clothes',
-        icon: '👕',
-        desc: 'Worn out t-shirts, jeans, etc.',
-        ideas: [
-            { name: 'T-Shirt Tote Bag', desc: 'Cut the sleeves and neck off an old t-shirt, cut fringes at the bottom and tie them together to make a no-sew bag.' },
-            { name: 'Cleaning Rags', desc: 'Cut unwearable cotton clothes into squares to use as reusable dusting and cleaning cloths.' },
-            { name: 'Braided Rug', desc: 'Cut old clothes into long strips, braid them together, and coil them into a colorful rug.' }
-        ]
-    },
-    {
-        id: 'tin-cans',
-        title: 'Tin Cans',
-        icon: '🥫',
-        desc: 'Soup, beans, or coffee cans',
-        ideas: [
-            { name: 'Herb Garden Planters', desc: 'Poke drainage holes in the bottom, paint the outside, and plant your favorite herbs.' },
-            { name: 'Wind Chimes', desc: 'Paint cans of different sizes and hang them together using string and washers so they clink in the wind.' },
-            { name: 'Desk Caddy', desc: 'Wrap cans in decorative paper or cork and use them to hold pens, scissors, and rulers.' }
-        ]
-    },
-    {
-        id: 'cd-dvd',
-        title: 'Old CDs/DVDs',
-        icon: '💿',
-        desc: 'Scratched or obsolete discs',
-        ideas: [
-            { name: 'Mosaic Coasters', desc: 'Cut CDs into small pieces and glue them onto a circular base for a shiny, mosaic effect.' },
-            { name: 'Sun Catchers', desc: 'Paint mandalas on the shiny side and hang them in the window.' },
-            { name: 'Bird Repellent', desc: 'Hang them in your garden; the reflective surface scares away birds from your crops.' }
-        ]
+// ============================
+// DARK MODE
+// ============================
+
+const themeBtn = document.getElementById("themeBtn");
+
+const savedTheme =
+    localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    if (themeBtn) {
+        themeBtn.innerHTML = "☀️";
     }
-];
-
-// DOM Elements
-const materialsGrid = document.getElementById('materialsGrid');
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsModal = document.getElementById('settingsModal');
-const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-const themeToggle = document.getElementById('themeToggle');
-
-const ideaModal = document.getElementById('ideaModal');
-const closeIdeaBtn = document.getElementById('closeIdeaBtn');
-const ideaModalTitle = document.getElementById('ideaModalTitle');
-const ideaModalIcon = document.getElementById('ideaModalIcon');
-const ideaList = document.getElementById('ideaList');
-
-// Initialize App
-function init() {
-    renderGrid();
-    initTheme();
-    setupEventListeners();
 }
 
-// Render the grid of waste items
-function renderGrid() {
-    materialsGrid.innerHTML = '';
-    wasteData.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <div class="card-icon">${item.icon}</div>
-            <h3>${item.title}</h3>
-            <p>${item.desc}</p>
-        `;
-        card.addEventListener('click', () => openIdeaModal(item));
-        materialsGrid.appendChild(card);
+if (themeBtn) {
+
+    themeBtn.addEventListener("click", () => {
+
+        document.body.classList.toggle("dark");
+
+        if (document.body.classList.contains("dark")) {
+
+            localStorage.setItem(
+                "theme",
+                "dark"
+            );
+
+            themeBtn.innerHTML = "☀️";
+
+        } else {
+
+            localStorage.setItem(
+                "theme",
+                "light"
+            );
+
+            themeBtn.innerHTML = "🌙";
+        }
     });
 }
 
-// Theme Management
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.checked = savedTheme === 'dark';
-}
 
-function toggleTheme(e) {
-    const newTheme = e.target.checked ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-}
+// ============================
+// ANIMATED COUNTERS
+// ============================
 
-// Modal Management
-function openModal(modalElement) {
-    modalElement.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
-}
+const counters =
+    document.querySelectorAll(".stat-card h2");
 
-function closeModal(modalElement) {
-    modalElement.classList.remove('active');
-    document.body.style.overflow = '';
-}
+function animateCounter() {
 
-function openIdeaModal(item) {
-    ideaModalTitle.textContent = item.title;
-    ideaModalIcon.textContent = item.icon;
-    
-    ideaList.innerHTML = '';
-    item.ideas.forEach(idea => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <h4>${idea.name}</h4>
-            <p>${idea.desc}</p>
-        `;
-        ideaList.appendChild(li);
+    counters.forEach(counter => {
+
+        const text =
+            counter.innerText;
+
+        let target =
+            parseInt(text);
+
+        if (isNaN(target)) return;
+
+        let count = 0;
+
+        const increment =
+            Math.ceil(target / 100);
+
+        const update = () => {
+
+            count += increment;
+
+            if (count >= target) {
+
+                counter.innerText = text;
+                return;
+            }
+
+            counter.innerText = count + "+";
+
+            requestAnimationFrame(update);
+        };
+
+        update();
     });
-    
-    openModal(ideaModal);
 }
 
-// Event Listeners
-function setupEventListeners() {
-    // Settings Modal
-    settingsBtn.addEventListener('click', () => openModal(settingsModal));
-    closeSettingsBtn.addEventListener('click', () => closeModal(settingsModal));
-    
-    // Idea Modal
-    closeIdeaBtn.addEventListener('click', () => closeModal(ideaModal));
-    
-    // Close modals on clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === settingsModal) closeModal(settingsModal);
-        if (e.target === ideaModal) closeModal(ideaModal);
-    });
-    
-    // Theme toggle
-    themeToggle.addEventListener('change', toggleTheme);
+
+// ============================
+// INTERSECTION OBSERVER
+// ============================
+
+const statsSection =
+    document.querySelector(".stats");
+
+if (statsSection) {
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        animateCounter();
+
+                        observer.unobserve(
+                            statsSection
+                        );
+                    }
+                });
+
+            },
+
+            {
+                threshold: 0.4
+            }
+        );
+
+    observer.observe(statsSection);
 }
 
-// Start the app
-document.addEventListener('DOMContentLoaded', init);
+
+// ============================
+// SCROLL REVEAL ANIMATION
+// ============================
+
+const revealElements =
+    document.querySelectorAll(
+        ".product-card,.step,.stat-card"
+    );
+
+const revealObserver =
+    new IntersectionObserver(
+
+        (entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.style.opacity = "1";
+
+                    entry.target.style.transform =
+                        "translateY(0)";
+                }
+
+            });
+
+        },
+
+        {
+            threshold: 0.2
+        }
+
+    );
+
+revealElements.forEach(el => {
+
+    el.style.opacity = "0";
+
+    el.style.transform =
+        "translateY(50px)";
+
+    el.style.transition =
+        "all .8s ease";
+
+    revealObserver.observe(el);
+
+});
+
+
+// ============================
+// HERO FLOAT EFFECT
+// ============================
+
+const hero =
+    document.querySelector(".circle");
+
+window.addEventListener(
+    "mousemove",
+
+    (e) => {
+
+        if (!hero) return;
+
+        const x =
+            (e.clientX / window.innerWidth - 0.5)
+            * 20;
+
+        const y =
+            (e.clientY / window.innerHeight - 0.5)
+            * 20;
+
+        hero.style.transform =
+            `translate(${x}px,${y}px)`;
+    }
+
+);
+
+
+// ============================
+// PRODUCT DATABASE
+// ============================
+
+if (
+    !localStorage.getItem("products")
+) {
+
+    const sampleProducts = [
+
+        {
+            id: 1,
+            name: "Bottle Plant Pot",
+            price: 199,
+            material: "Plastic Bottle",
+            image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600"
+        },
+
+        {
+            id: 2,
+            name: "CD Wall Clock",
+            price: 299,
+            material: "Old CD",
+            image: "https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600"
+        },
+
+        {
+            id: 3,
+            name: "Desk Organizer",
+            price: 149,
+            material: "Cardboard",
+            image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600"
+        }
+
+    ];
+
+    localStorage.setItem(
+        "products",
+        JSON.stringify(sampleProducts)
+    );
+
+}
+
+
+// ============================
+// CART INITIALIZATION
+// ============================
+
+if (
+    !localStorage.getItem("cart")
+) {
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify([])
+    );
+
+}
+
+
+// ============================
+// NAVBAR SHADOW ON SCROLL
+// ============================
+
+const navbar =
+    document.querySelector(".navbar");
+
+window.addEventListener(
+    "scroll",
+
+    () => {
+
+        if (window.scrollY > 50) {
+
+            navbar.style.boxShadow =
+                "0 10px 30px rgba(0,0,0,.12)";
+
+        }
+        else {
+
+            navbar.style.boxShadow =
+                "0 5px 20px rgba(0,0,0,.05)";
+        }
+
+    }
+
+);
+
+
+// ============================
+// LOADING ANIMATION
+// ============================
+
+window.addEventListener(
+    "load",
+
+    () => {
+
+        document.body.style.opacity = "0";
+
+        setTimeout(() => {
+
+            document.body.style.transition =
+                "opacity .8s ease";
+
+            document.body.style.opacity = "1";
+
+        }, 100);
+
+    }
+
+);
+
+
+// ============================
+// GREETING MESSAGE
+// ============================
+
+const hour =
+    new Date().getHours();
+
+let greeting = "";
+
+if (hour < 12) {
+
+    greeting = "🌞 Good Morning";
+
+}
+else if (hour < 18) {
+
+    greeting = "🌤 Good Afternoon";
+
+}
+else {
+
+    greeting = "🌙 Good Evening";
+
+}
+
+console.log(
+    greeting +
+    " Welcome to Waste2Wealth"
+);
